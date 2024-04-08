@@ -1,5 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/home/adam/Documents/manim/Tutorial/1UpdaterAnimation/media/videos/scene/1080p60/partial_movie_files/MoveBox/3977891868_3621270172_223132457.mp4'
-file 'file:/home/adam/Documents/manim/Tutorial/1UpdaterAnimation/media/videos/scene/1080p60/partial_movie_files/MoveBox/2852726489_3593705719_1566207211.mp4'
-file 'file:/home/adam/Documents/manim/Tutorial/1UpdaterAnimation/media/videos/scene/1080p60/partial_movie_files/MoveBox/2852726489_2576024914_2354168912.mp4'
-file 'file:/home/adam/Documents/manim/Tutorial/1UpdaterAnimation/media/videos/scene/1080p60/partial_movie_files/MoveBox/2852726489_3313333205_2354168912.mp4'
