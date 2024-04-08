@@ -3,7 +3,7 @@ from manim import *
 class PercentVisual(Scene):
     def construct(self):
         question = MathTex(r"Find\:8\%\:of\:250", substrings_to_isolate=["8"]).shift(UP*3).scale(1.25)
-        hint = Text("8% means '8 for each 100'").next_to(question.get_bottom(), DOWN, buff=0.3)
+        hint = Text("8% means '8 for each 100'", substrings_to_isolate=["8"]).next_to(question.get_bottom(), DOWN, buff=0.3)
 
         square1 = Square(side_length=2).shift(LEFT*2.5).set_fill()
         square2 = Square(side_length=2).next_to(square1.get_right(), RIGHT, 0.5)
