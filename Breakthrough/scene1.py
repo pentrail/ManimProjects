@@ -23,7 +23,7 @@ class DotProduct(MyThreeDScene):
 
         ax = ThreeDAxes().scale(0.8)
 
-        label = Tex("Dot Product:").shift(DOWN*3.2)
+        label = Tex("Dot Product:")
 
         labelmath1 = MathTex(r"\vec{v}").set_color(RED).next_to(label, RIGHT, buff=0.2)
         labelmath2 = MathTex(r"\cdot").next_to(labelmath1, RIGHT, buff=0.1)
@@ -41,7 +41,7 @@ class DotProduct(MyThreeDScene):
 
         bottomText = VGroup(label, label2, labelmath1, labelmath2, labelmath3, labelmath4)
 
-        bottomText.move_to(aligned_edge=BOTTOM)
+        bottomText.move_to([0,0,0]).shift(DOWN*3.2)
 
         self.set_camera_orientation(phi=2*PI/5, theta=7*PI/5, gamma=0)
         
@@ -58,6 +58,6 @@ class DotProduct(MyThreeDScene):
         ).set_color(BLUE))
         
         self.add(ax, arrow, label, arrow2, label2, labelmath1, labelmath2, labelmath3, labelmath4)
-        self.begin_ambient_camera_rotation(rate=0.07)
+        self.begin_ambient_camera_rotation(rate=0.04)
 
         self.play(x1.animate.set_value(2), y1.animate.set_value(2), z1.animate.set_value(2), run_time=3, rate_func=linear)
