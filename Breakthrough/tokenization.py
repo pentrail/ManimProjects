@@ -35,17 +35,17 @@ class Embedding(Scene):
                 matrices.add(MathTex(r"\begin{bmatrix}{%s} \\{%s} \\...\\{%s} \\\end{bmatrix}" %(str(random.randint(-5,10)), str(random.randint(-5,10)), str(random.randint(-5,10)))).next_to(newSentence2[i], DOWN, 0.5).scale(0.85))
 
 
-        bat1 = VGroup(newSentence1[4].copy(), matrices[8].copy(), rectangles[8].copy())
-        bat2 = VGroup(newSentence2[4].copy(), matrices[9].copy(), rectangles[9].copy())
+        bat1 = VGroup(newSentence1[4].copy(), matrices[8].copy().set_color(BLUE), rectangles[8].copy())
+        bat2 = VGroup(newSentence2[4].copy(), matrices[9].copy().set_color(BLUE), rectangles[9].copy())
 
-        arrow1 = Arrow(start=LEFT, end=RIGHT).shift(UP*1.4, LEFT*1).scale(2.5)
-        arrow2 = Arrow(start=LEFT, end=RIGHT).shift(DOWN*2.6, LEFT*1).scale(2.5)
+        arrow1 = Arrow(start=LEFT, end=RIGHT).shift(UP*1.4, LEFT*3).scale(2.5).set_color(YELLOW)
+        arrow2 = Arrow(start=LEFT, end=RIGHT).shift(DOWN*2.6, LEFT*3).scale(2.5).set_color(YELLOW)
 
-        attention1 = Text("Attention").next_to(arrow1, UP, SMALL_BUFF).scale(0.6)
-        attention2 = Text("Attention").next_to(arrow2, UP, SMALL_BUFF).scale(0.6)
+        attention1 = Text("Attention").next_to(arrow1, UP, SMALL_BUFF).scale(0.6).set_color(YELLOW)
+        attention2 = Text("Attention").next_to(arrow2, UP, SMALL_BUFF).scale(0.6).set_color(YELLOW)
 
-        newMatrix1 = MathTex(r"\begin{bmatrix}7 \\4 \\...\\4 \\\end{bmatrix}").next_to(arrow1, RIGHT, 0.5).scale(0.85)
-        newMatrix2 = MathTex(r"\begin{bmatrix}5 \\1 \\...\\3 \\\end{bmatrix}").next_to(arrow2, RIGHT, 0.5).scale(0.85)
+        newMatrix1 = MathTex(r"\begin{bmatrix}7 \\5 \\...\\-1 \\\end{bmatrix}").next_to(arrow1, RIGHT, 0.5).scale(0.85).set_color(RED)
+        newMatrix2 = MathTex(r"\begin{bmatrix}5 \\1 \\...\\3 \\\end{bmatrix}").next_to(arrow2, RIGHT, 0.5).scale(0.85).set_color(RED)
 
         self.play(Write(group1), run_time=1)
         self.wait(duration=1)
@@ -63,9 +63,8 @@ class Embedding(Scene):
         self.play(Flash(matrices[8], color=WHITE, flash_radius=matrices[8].width+SMALL_BUFF), Flash(matrices[9], color=WHITE, flash_radius=matrices[9].width+SMALL_BUFF), run_time=0.75)
         self.wait(duration=0.2)
 
-        self.add(bat1, bat2)
-        self.play(Uncreate(newSentence1), Uncreate(newSentence2), Uncreate(matrices), Uncreate(rectangles), run_time=0.75)
-        self.play(bat1.animate.shift(LEFT*8), bat2.animate.shift(LEFT*8))
+        self.play(Create(bat1), Create(bat2), Uncreate(newSentence1), Uncreate(newSentence2), Uncreate(matrices), Uncreate(rectangles), run_time=0.75)
+        self.play(bat1.animate.shift(LEFT*10), bat2.animate.shift(LEFT*10))
         self.wait(duration=2.5)
 
         self.play(
