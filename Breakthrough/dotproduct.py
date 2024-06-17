@@ -55,21 +55,23 @@ class QK(Scene):
         blankMatrixQuery = Matrix([[0.0], [0.0], ["..."], [0.0]], h_buff=3).scale(0.58).move_to(compatabilityText).shift(DOWN*1.35, LEFT*2.15)
         blankMatrixQuery.get_columns()[0].set_opacity(0)
 
-        blankMatrixKey = Matrix([[0.0, 0.0, "...", 0.0]], v_buff=1.7).scale(0.58).next_to(blankMatrixQuery, RIGHT, 0.1)
+        dot = MathTex(r"\cdot").next_to(blankMatrixQuery, RIGHT, 0.1).scale(0.7)
+
+        blankMatrixKey = Matrix([[0.0, 0.0, "...", 0.0]], v_buff=1.7).scale(0.58).next_to(dot, RIGHT, 0.1)
         blankMatrixKey.get_rows()[0].set_opacity(0)
 
         equals = MathTex("=").next_to(blankMatrixKey, RIGHT, 0.15).scale(0.7)
 
         attentionPattern = VGroup(
-            MathTex("3.5"), MathTex("-1.1"), MathTex("-3.5"), MathTex("-0.1"), MathTex("9.1"),
-            MathTex("7.5"), MathTex("-2.1"), MathTex("-2.5"), MathTex("-0.2"), MathTex("9.2"),
-            MathTex("1.5"), MathTex("-3.1"), MathTex("-1.5"), MathTex("-0.3"), MathTex("9.3"),
-            MathTex("6.5"), MathTex("-4.1"), MathTex("-0.5"), MathTex("-0.4"), MathTex("9.4"),
-            MathTex("2.5"), MathTex("-5.1"), MathTex("-6.5"), MathTex("-0.6"), MathTex("9.5"),
+            MathTex("0.5"), MathTex("-1.1"), MathTex("-13.5"), MathTex("-10.1"), MathTex("-15.2"),
+            MathTex("-9.2"), MathTex("0.1"), MathTex("-14.5"), MathTex("-8.2"), MathTex("9.2"),
+            MathTex("-9.3"), MathTex("-10.1"), MathTex("0.2"), MathTex("-12.3"), MathTex("-10.3"),
+            MathTex("-8.6"), MathTex("-3.1"), MathTex("-9.5"), MathTex("1.0"), MathTex("15.4"),
+            MathTex("-12.1"), MathTex("1.1"), MathTex("-10.5"), MathTex("0.6"), MathTex("0.2"),
         )
 
         self.add(background)
-        self.add(queryMatrix, keyMatrixTransposed, sentence1, rectangles, sentenceQ, compatabilityText, blankMatrixKey, blankMatrixQuery, table, equals)
+        self.add(queryMatrix, keyMatrixTransposed, sentence1, rectangles, sentenceQ, compatabilityText, blankMatrixKey, blankMatrixQuery, table, equals, dot)
         for i in range(0,5):
             workingQueryText = rectangleWord[2*i].copy()
             workingQueryMatrix = queryColumns[i].copy()
@@ -82,7 +84,7 @@ class QK(Scene):
                         workingKeyText.scale(0.6).animate.move_to(compatabilityText).shift(RIGHT*1.5), 
                         workingKeyMatrix.animate.move_to(blankMatrixKey), 
                     ),
-                    Write(attentionPattern[j*5+i].scale(0.5).next_to(equals, RIGHT, 0.22)),
+                    Write(attentionPattern[j*5+i].scale(0.5).next_to(equals, RIGHT, 0.18)),
                     lag_ratio=0.5
                 ), run_time=1)
                 self.play(attentionPattern[j*5+i].animate.scale(1.2).move_to(table.get_cell(pos=(j+1, i+1))), run_time=0.4)
