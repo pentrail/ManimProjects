@@ -13,6 +13,8 @@ class Weights(Scene):
         matrix = Matrix([[3, 9, 3, -3, 5], [9, 3, -2, 5, 3], ["...", "...", "...", "...", "..."], [10, 10, 8, 0, 4]]).next_to(newSentence1.get_center(), DOWN, 0.2).scale(0.58)
         matrix.set_column_colors(ORANGE, RED, YELLOW, GREEN, BLUE)
 
+        matrixBrackets = Matrix([[3, 9, 3, -3, 5], [9, 3, -2, 5, 3], ["...", "...", "...", "...", "..."], [10, 10, 8, 0, 4]]).next_to(newSentence1.get_center(), DOWN, 0.2).scale(0.58)
+        matrixBrackets.get_columns().set_opacity(0)
         keyMatrix = matrix.copy().shift(DOWN*2.25, LEFT*4)
 
         valueMatrix = matrix.copy().shift(DOWN*4.5, LEFT*4)
@@ -47,9 +49,12 @@ class Weights(Scene):
         self.add(newSentence1, rectangles, matrices)
         self.wait(duration=1.5)
 
-        self.play(ReplacementTransform(matrices, matrix))
+        self.play(LaggedStart(
+            TransformMatchingShapes(matrices, matrix.get_columns()),
+            Create(matrixBrackets)
+        , lag_ratio=0.5))
         self.wait(duration=0.5)
-        self.play(matrix.animate.shift(LEFT*4), ReplacementTransform(matrix.copy(), keyMatrix), ReplacementTransform(matrix.copy(), valueMatrix))
+        self.play(matrixBrackets.animate(run_time=0.05).set_opacity(0), matrix.animate.shift(LEFT*4), ReplacementTransform(matrix.copy(), keyMatrix), ReplacementTransform(matrix.copy(), valueMatrix))
         self.play(Write(qmultiplication), Write(kmultiplication), Write(vmultiplication))
         self.play(AnimationGroup(Create(newQueryMatrix), Create(newKeyMatrix), Create(newValueMatrix), run_time=0.75))
         self.wait(duration=0.25)
