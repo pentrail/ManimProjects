@@ -1,0 +1,98 @@
+from manim import *
+import random
+
+class Soft(Scene):
+    def construct(self):
+
+
+        queryMatrix = Matrix([[1.4, 5.6, -3.6, 2.4, -5.1], [4.5, -2.9, 6.4, -0.5, 4.3], ["...", "...", "...", "...", "..."], [-8.1, 2.8, -4.4, 1.1, 4.9]], h_buff=3).scale(0.58).shift(UP*2, RIGHT*2.8)
+        queryMatrix.set_column_colors(ORANGE, RED, YELLOW, GREEN, BLUE)
+
+        # keyMatrix = Matrix([[3.9, -5.8, 5.2, -1.4, -5.1], [-9.2, -1.9, -3.1, 6.7, 4.0], ["...", "...", "...", "...", "..."], [-2.1, 1.4, -3.6, 3.1, 6.1]]).scale(0.58).next_to(queryMatrix, DOWN, 1)
+        # keyMatrix.set_column_colors(ORANGE, RED, YELLOW, GREEN, BLUE)
+
+        keyMatrixTransposed = Matrix([[3.9, -9.2, "...", -2.1 ], [-5.8, -1.9, "...", 1.4], [5.2, -3.1, "...", -3.6], [-1.4, 6.7, "...", 3.1], [-5.1, 4.0, "...", 6.1]], v_buff=1.7).scale(0.58).next_to(queryMatrix, DOWN, 0.25).shift(LEFT*5.8)
+        keyMatrixTransposed.set_row_colors(ORANGE, RED, YELLOW, GREEN, BLUE)
+        
+        rectangles = VGroup()
+
+        sentence1 = Tex("He ", "swung ", "the ", "baseball ", "bat ").scale(1).set_color_by_tex("He", ORANGE).set_color_by_tex("swung", RED).set_color_by_tex("the", YELLOW).set_color_by_tex("baseball", GREEN).set_color_by_tex("bat", BLUE)
+        sentence1.arrange(DOWN, buff=0.55, aligned_edge=RIGHT, center=False).next_to(keyMatrixTransposed, LEFT, buff=0.3)
+
+        sentenceQ = Tex("He ", "swung ", "the ", "baseball ", "bat ").scale(1).set_color_by_tex("He", ORANGE).set_color_by_tex("swung", RED).set_color_by_tex("the", YELLOW).set_color_by_tex("baseball", GREEN).set_color_by_tex("bat", BLUE)
+        sentenceQ.arrange(RIGHT, buff=0.55).next_to(queryMatrix, UP, buff=0.3)
+
+        rectangleWord = []
+
+        for i in range(0, 5):
+            rectangles.add(Rectangle(width=(sentence1[i].width+0.3), height=(sentence1[i].height+0.3), color=sentence1[i].color).move_to(sentence1[i]))
+            rectangles.add(Rectangle(width=(sentenceQ[i].width+0.3), height=(sentenceQ[i].height+0.3), color=sentenceQ[i].color).move_to(sentenceQ[i]))
+
+            rectangleWord.append(VGroup(sentenceQ[i], rectangles[i*2+1]))
+            rectangleWord.append(VGroup(sentence1[i], rectangles[i*2]))
+
+        table = Table([
+            ["0", "0", "0", "0", "0"],
+            ["0", "0", "0", "0", "0"],
+            ["0", "0", "0", "0", "0"],
+            ["0", "0", "0", "0", "0"],
+            ["0", "0", "0", "0", "0"]], v_buff=1.6, h_buff=3.25).scale(0.42).move_to(queryMatrix.get_center()).shift(DOWN*3.42).set_opacity(0.7)
+        # .set_color_by_gradient([BLUE, GREEN, YELLOW, RED, ORANGE])
+        table.get_rows()[0:5].set_opacity(0)
+
+
+        background = Rectangle(height=2.85, width=5.6).move_to(queryMatrix).shift(LEFT*7, UP*0.42)
+        background.set_fill(opacity=.10)
+        background.set_stroke(opacity=0.9)
+        background.set_color(WHITE)
+
+
+        compatabilityText = MathTex(r"Compatibility(\qquad\qquad ,\qquad\qquad)=").scale(0.85).move_to(rectangles[1]).shift(LEFT*3.76, UP*0.07).scale(0.75)
+
+        queryColumns = queryMatrix.get_columns()
+        keyRows = keyMatrixTransposed.get_rows()
+
+        blankMatrixQuery = Matrix([[0.0], [0.0], ["..."], [0.0]], h_buff=3).scale(0.58).move_to(compatabilityText).shift(DOWN*1.35, LEFT*2.15)
+        blankMatrixQuery.get_columns()[0].set_opacity(0)
+
+        dot = MathTex(r"\cdot").next_to(blankMatrixQuery, RIGHT, 0.1).scale(0.7)
+
+        blankMatrixKey = Matrix([[0.0, 0.0, "...", 0.0]], v_buff=1.7).scale(0.58).next_to(dot, RIGHT, 0.1)
+        blankMatrixKey.get_rows()[0].set_opacity(0)
+
+        equals = MathTex("=").next_to(blankMatrixKey, RIGHT, 0.15).scale(0.7)
+
+        attentionPattern = VGroup(
+            MathTex("0.5"), MathTex("-1.1"), MathTex("-13.5"), MathTex("-10.1"), MathTex("-15.2"),
+            MathTex("-9.2"), MathTex("0.1"), MathTex("-14.5"), MathTex("-8.2"), MathTex("9.2"),
+            MathTex("-9.3"), MathTex("-10.1"), MathTex("0.2"), MathTex("-12.3"), MathTex("-10.3"),
+            MathTex("-8.6"), MathTex("-3.1"), MathTex("-9.5"), MathTex("1.0"), MathTex("15.4"),
+            MathTex("-12.1"), MathTex("1.1"), MathTex("-10.5"), MathTex("0.6"), MathTex("0.2"),
+        )
+
+        attentionPatternMatrix = Matrix([[0.5, -1.1, -13.5, -10.1, -15.2], [-9.2, 0.1, -14.5, -8.2, 9.2], [-9.3, -10.1, 0.2, -12.3, -10.3], [-8.6, -3.1, -9.5, 1.0, 15.4], [-12.1, 1.1, -10.5, 0.6, 0.2]], h_buff=1.8, v_buff=1.2).scale(0.85)
+        softmaxText = MathTex(r"softmax(v_n)=\frac{e^{z_i}}{7}")
+
+        self.add(background)
+        self.add(queryMatrix, keyMatrixTransposed, sentence1, rectangles, sentenceQ, compatabilityText, blankMatrixKey, blankMatrixQuery, table, equals, dot)
+        for i in range(0,5):
+            workingQueryText = rectangleWord[2*i].copy()
+            workingQueryMatrix = queryColumns[i].copy()
+            self.add(workingQueryText.scale(0.6).move_to(compatabilityText).shift(RIGHT*0.11), workingQueryMatrix.move_to(blankMatrixQuery))
+            for j in range(0,5):
+                workingKeyText = rectangleWord[2*j+1].copy()
+                workingKeyMatrix = keyRows[j].copy()
+                self.add(
+                    workingKeyText.scale(0.6).move_to(compatabilityText).shift(RIGHT*1.5), 
+                    workingKeyMatrix.move_to(blankMatrixKey), 
+                    attentionPattern[j*5+i].scale(0.5).next_to(equals, RIGHT, 0.18))
+                self.add(attentionPattern[j*5+i].scale(1.2).move_to(table.get_cell(pos=(j+1, i+1))))
+                self.remove(workingKeyText, workingKeyMatrix)
+            self.remove(workingQueryText, workingQueryMatrix)
+        self.wait()
+        self.play(Uncreate(VGroup(background, queryMatrix, keyMatrixTransposed, compatabilityText, blankMatrixKey, blankMatrixQuery, equals, dot)))
+        self.play(ReplacementTransform(VGroup(attentionPattern, table), attentionPatternMatrix))
+        self.play(Write(softmaxText))
+        self.wait()
+
+        
