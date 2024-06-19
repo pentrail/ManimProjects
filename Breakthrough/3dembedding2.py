@@ -23,7 +23,7 @@ class Embedding2(ThreeDScene):
             start=np.array([0,0,0]),
             end=np.array([5*0.6, 1*0.6, 3*0.6]),
             resolution=8
-        ).set_color(RED)
+        ).set_color(PURPLE)
 
         self.begin_ambient_camera_rotation(rate=0.04)
 

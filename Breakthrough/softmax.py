@@ -63,15 +63,27 @@ class Soft(Scene):
         equals = MathTex("=").next_to(blankMatrixKey, RIGHT, 0.15).scale(0.7)
 
         attentionPattern = VGroup(
-            MathTex("0.5"), MathTex("-1.1"), MathTex("-13.5"), MathTex("-10.1"), MathTex("-15.2"),
-            MathTex("-9.2"), MathTex("0.1"), MathTex("-14.5"), MathTex("-8.2"), MathTex("9.2"),
-            MathTex("-9.3"), MathTex("-10.1"), MathTex("0.2"), MathTex("-12.3"), MathTex("-10.3"),
-            MathTex("-8.6"), MathTex("-3.1"), MathTex("-9.5"), MathTex("1.0"), MathTex("15.4"),
-            MathTex("-12.1"), MathTex("1.1"), MathTex("-10.5"), MathTex("0.6"), MathTex("0.2"),
+            MathTex("5.2"), MathTex("-92.1"), MathTex("-93.5"), MathTex("-86.2"), MathTex("-98.1"),
+            MathTex("-91.2"), MathTex("3.6"), MathTex("-92.1"), MathTex("-31.7"), MathTex("11.4"),
+            MathTex("-95.5"), MathTex("-87.5"), MathTex("2.3"), MathTex("-95.2"), MathTex("-97.5"),
+            MathTex("-78.1"), MathTex("-82.4"), MathTex("-92.4"), MathTex("10.6"), MathTex("6.2"),
+            MathTex("-97.2"), MathTex("72.2"), MathTex("-94.3"), MathTex("89.4"), MathTex("2.6"),
         )
 
-        attentionPatternMatrix = Matrix([[0.5, -1.1, -13.5, -10.1, -15.2], [-9.2, 0.1, -14.5, -8.2, 9.2], [-9.3, -10.1, 0.2, -12.3, -10.3], [-8.6, -3.1, -9.5, 1.0, 15.4], [-12.1, 1.1, -10.5, 0.6, 0.2]], h_buff=1.8, v_buff=1.2).scale(0.85)
-        softmaxText = MathTex(r"softmax(v_n)=\frac{e^{z_i}}{7}")
+        attentionPatternMatrix = Matrix([[5.2, -92.1, -93.5, -86.2, -98.1], [-11.2, 1.6, -92.1, -31.7, 11.4], [-95.5, -87.5, 2.3, -95.2, -97.5], [-78.1, -82.4, -92.3, 10.6, 6.2], [-97.2, 72.2, -94.3, 89.4, 2.6]], h_buff=1.8, v_buff=2.5).scale(0.5)
+        scalarBrackets = Matrix([[0, 0],[0, 0]], v_buff=3, h_buff=4).scale(0.5).next_to(attentionPatternMatrix, RIGHT, 0.5).shift(LEFT*4.5)
+        scalarBrackets.get_columns().set_opacity(0)
+        dot2 = MathTex(r"\cdot").scale(0.7).move_to((attentionPatternMatrix.get_right()+scalarBrackets.get_left())/2).shift(LEFT*2.25)
+        scalar = MathTex(r"\frac{1}{\sqrt{d_k}}").move_to(scalarBrackets)
+        scalarWithNum = MathTex(r"\frac{1}{\sqrt{256}}").move_to(scalarBrackets)
+
+        equals2 = MathTex("=").scale(1.5).next_to(scalarBrackets.get_right(), RIGHT, 0.35)
+
+        scaledAttention = Matrix([[0.33, -5.76, -5.84, -5.39, -6.13], [-5.7, 0.23, -5.76, -1.98, 0.71], [-5.97, -5.47, 0.14, -5.95, -6.09], [-4.88, -5.15, -5.78, 0.66, 0.39], [-6.08, 4.51, -5.89, 5.59, -0.16]], h_buff=1.8, v_buff=2.5).scale(0.5).next_to(equals2, RIGHT, 0.35)
+
+        softmaxText = MathTex(r"softmax(\vec{v_1})").move_to(scaledAttention).shift(LEFT*4.1, UP*2.3)
+        
+        softmaxMatrix = Matrix([[1, 0, 0, 0, 0], [0, 0.37, 0, 0.04, 0.59], [0, 0, 1, 0, 0], [0, 0, 0, 0.57, 0.43], [0, 0.25, 0, 0.75, 0]], h_buff=1.8, v_buff=2.5).scale(0.5).move_to(scaledAttention).shift(RIGHT*0.5)
 
         self.add(background)
         self.add(queryMatrix, keyMatrixTransposed, sentence1, rectangles, sentenceQ, compatabilityText, blankMatrixKey, blankMatrixQuery, table, equals, dot)
@@ -85,14 +97,22 @@ class Soft(Scene):
                 self.add(
                     workingKeyText.scale(0.6).move_to(compatabilityText).shift(RIGHT*1.5), 
                     workingKeyMatrix.move_to(blankMatrixKey), 
-                    attentionPattern[j*5+i].scale(0.5).next_to(equals, RIGHT, 0.18))
-                self.add(attentionPattern[j*5+i].scale(1.2).move_to(table.get_cell(pos=(j+1, i+1))))
+                    attentionPattern[i*5+j].scale(0.5).next_to(equals, RIGHT, 0.18))
+                self.add(attentionPattern[i*5+j].scale(1.2).move_to(table.get_cell(pos=(i+1, j+1))))
                 self.remove(workingKeyText, workingKeyMatrix)
             self.remove(workingQueryText, workingQueryMatrix)
         self.wait()
-        self.play(Uncreate(VGroup(background, queryMatrix, keyMatrixTransposed, compatabilityText, blankMatrixKey, blankMatrixQuery, equals, dot)))
+        self.play(Uncreate(VGroup(background, queryMatrix, keyMatrixTransposed, compatabilityText, blankMatrixKey, blankMatrixQuery, equals, dot, rectangles, sentence1, sentenceQ), run_time=0.5))
         self.play(ReplacementTransform(VGroup(attentionPattern, table), attentionPatternMatrix))
+        self.play(attentionPatternMatrix.animate(run_time=0.6).shift(LEFT*4.5))
+        self.play(Write(scalarBrackets), Write(scalar), Write(dot2), Write(equals2), run_time=0.5)
+        self.wait(duration=0.5)
+        self.play(Write(scaledAttention), TransformMatchingTex(scalar, scalarWithNum))
+        self.wait()
+        self.play(Uncreate(VGroup(attentionPatternMatrix, dot2, equals2, scalarBrackets, scalarWithNum)), run_time=0.5)
+        self.play(scaledAttention.animate(run_time=0.6).shift(LEFT*8.8))
         self.play(Write(softmaxText))
+        self.play(Write(softmaxMatrix))
         self.wait()
 
         
