@@ -81,7 +81,7 @@ class Soft(Scene):
 
         scaledAttention = Matrix([[0.33, -5.76, -5.84, -5.39, -6.13], [-5.7, 0.23, -5.76, -1.98, 0.71], [-5.97, -5.47, 0.14, -5.95, -6.09], [-4.88, -5.15, -5.78, 0.66, 0.39], [-6.08, 4.51, -5.89, 5.59, -0.16]], h_buff=1.8, v_buff=2.5).scale(0.5).next_to(equals2, RIGHT, 0.35)
 
-        softmaxText = MathTex(r"softmax(\vec{v_1})").move_to(scaledAttention).shift(LEFT*4.1, UP*2.3)
+        softmaxText = MathTex(r"softmax(\vec{v_1})_i").move_to(scaledAttention).shift(LEFT*4.1, UP*2.3)
         
         softmaxMatrix = Matrix([[1, 0, 0, 0, 0], [0, 0.37, 0, 0.04, 0.59], [0, 0, 1, 0, 0], [0, 0, 0, 0.57, 0.43], [0, 0.25, 0, 0.75, 0]], h_buff=1.8, v_buff=2.5).scale(0.5).move_to(scaledAttention).shift(RIGHT*0.5)
 
