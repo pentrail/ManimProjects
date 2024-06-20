@@ -52,13 +52,13 @@ class Soft(Scene):
         queryColumns = queryMatrix.get_columns()
         keyRows = keyMatrixTransposed.get_rows()
 
-        blankMatrixQuery = Matrix([[0.0], [0.0], ["..."], [0.0]], h_buff=3).scale(0.58).move_to(compatabilityText).shift(DOWN*1.35, LEFT*2.15)
-        blankMatrixQuery.get_columns()[0].set_opacity(0)
+        blankMatrixQuery = Matrix([[0.0, 0.0, "...", 0.0]], v_buff=1.7).scale(0.58).move_to(compatabilityText).shift(DOWN*1.35, LEFT*1.08)
+        blankMatrixQuery.get_rows()[0].set_opacity(0)
 
         dot = MathTex(r"\cdot").next_to(blankMatrixQuery, RIGHT, 0.1).scale(0.7)
 
-        blankMatrixKey = Matrix([[0.0, 0.0, "...", 0.0]], v_buff=1.7).scale(0.58).next_to(dot, RIGHT, 0.1)
-        blankMatrixKey.get_rows()[0].set_opacity(0)
+        blankMatrixKey = Matrix([[0.0], [0.0], ["..."], [0.0]], h_buff=3).scale(0.58).next_to(dot, RIGHT, 0.1)
+        blankMatrixKey.get_columns()[0].set_opacity(0)
 
         equals = MathTex("=").next_to(blankMatrixKey, RIGHT, 0.15).scale(0.7)
 
@@ -79,11 +79,13 @@ class Soft(Scene):
 
         equals2 = MathTex("=").scale(1.5).next_to(scalarBrackets.get_right(), RIGHT, 0.35)
 
-        scaledAttention = Matrix([[0.33, -5.76, -5.84, -5.39, -6.13], [-5.7, 0.23, -5.76, -1.98, 0.71], [-5.97, -5.47, 0.14, -5.95, -6.09], [-4.88, -5.15, -5.78, 0.66, 0.39], [-6.08, 4.51, -5.89, 5.59, -0.16]], h_buff=1.8, v_buff=2.5).scale(0.5).next_to(equals2, RIGHT, 0.35)
+        scaledAttention = Matrix([[0.33, -5.76, -5.84, -5.39, -6.13], [-5.7, 0.23, -5.76, -1.98, 0.71], [-5.97, -5.47, 0.14, -5.95, -6.09], [-4.88, -5.15, -5.78, 0.66, 0.39], [-6.08, 4.51, -5.89, 5.59, 0.16]], h_buff=1.8, v_buff=2.5).scale(0.5).next_to(equals2, RIGHT, 0.35)
 
         softmaxText = MathTex(r"softmax(\vec{v_1})_i").move_to(scaledAttention).shift(LEFT*4.1, UP*2.3)
         
         softmaxMatrix = Matrix([[1, 0, 0, 0, 0], [0, 0.37, 0, 0.04, 0.59], [0, 0, 1, 0, 0], [0, 0, 0, 0.57, 0.43], [0, 0.25, 0, 0.75, 0]], h_buff=1.8, v_buff=2.5).scale(0.5).move_to(scaledAttention).shift(RIGHT*0.5)
+        softmaxBrackets = Matrix([[1, 0, 0, 0, 0], [0, 0.37, 0, 0.04, 0.59], [0, 0, 1, 0, 0], [0, 0, 0, 0.57, 0.43], [0, 0.25, 0, 0.75, 0]], h_buff=1.8, v_buff=2.5).scale(0.5).move_to(scaledAttention).shift(RIGHT*0.5)
+        softmaxBrackets.get_rows().set_opacity(0)
 
         self.add(background)
         self.add(queryMatrix, keyMatrixTransposed, sentence1, rectangles, sentenceQ, compatabilityText, blankMatrixKey, blankMatrixQuery, table, equals, dot)
@@ -109,10 +111,20 @@ class Soft(Scene):
         self.wait(duration=0.5)
         self.play(Write(scaledAttention), TransformMatchingTex(scalar, scalarWithNum))
         self.wait()
-        self.play(Uncreate(VGroup(attentionPatternMatrix, dot2, equals2, scalarBrackets, scalarWithNum)), run_time=0.5)
+        self.play(Unwrite(VGroup(attentionPatternMatrix, dot2, equals2, scalarBrackets, scalarWithNum)), run_time=0.35)
         self.play(scaledAttention.animate(run_time=0.6).shift(LEFT*8.8))
-        self.play(Write(softmaxText))
-        self.play(Write(softmaxMatrix))
+        for i in range(0,5):
+            workingSoftmaxText = MathTex("softmax(\\vec{v_%i})_i" % (i+1)).scale(0.6).move_to(scaledAttention.get_rows()[i]).shift(RIGHT*4.75).set_color(YELLOW)
+            workingSoftmaxText.set_z_index(1)
+            workingRectangle = SurroundingRectangle(workingSoftmaxText, color=YELLOW, buff=0.23, corner_radius=0.25, fill_color=BLACK, fill_opacity=1)
+            workingArrow1 = Arrow(start=scaledAttention.get_rows()[i].get_right(), end=workingRectangle.get_left()).shift(RIGHT*0.15).set_color(YELLOW)
+            workingArrow2 = Arrow(start=workingRectangle.get_right(), end=softmaxMatrix.get_rows()[i].get_left()).shift(LEFT*0.15).set_color(YELLOW)
+            # Repalcement Softmax Text
+            self.play(Write(workingSoftmaxText), Create(workingRectangle), run_time=0.2)
+            self.play(Create(workingArrow1), run_time=0.4)
+            self.play(Create(workingArrow2), run_time=0.2)
+            self.play(Write(softmaxMatrix.get_rows()[i]), run_time=0.3)
+        self.play(Write(softmaxBrackets))
         self.wait()
 
         
